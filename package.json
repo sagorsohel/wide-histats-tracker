@@ -1,0 +1,13 @@
+{
+  "name": "wide-histat-tracker",
+  "version": "1.0.0",
+  "description": "High-performance lightweight browser tracking SDK for Wide-Histat",
+  "main": "dist/tracker.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --minify --format=iife --outfile=dist/tracker.min.js && esbuild src/index.ts --bundle --minify --format=iife --outfile=../backend/public/tracker.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.3"
+  }
+}
