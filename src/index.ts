@@ -36,14 +36,15 @@ declare global {
       for (const item of hasync) {
         if (
           Array.isArray(item) &&
-          (item[0] === "Histats.start" || item[0] === "Analycos.start") &&
-          typeof item[1] === "string"
+          (item[0] === "Histats.start" || item[0] === "Analycos.start")
         ) {
-          const parts = item[1].split(",");
-          if (parts[1]) {
-            websiteId = parts[1].trim();
-            break;
+          if (typeof item[1] === "string" && item[1].includes(",")) {
+            const parts = item[1].split(",");
+            if (parts[1]) websiteId = parts[1].trim();
+          } else if (item[1]) {
+            websiteId = String(item[1]).trim();
           }
+          break;
         }
       }
     }
