@@ -27,7 +27,28 @@ declare global {
 
   if (!currentScript) return;
 
-  const websiteId = currentScript.getAttribute("data-website-id");
+  let websiteId = currentScript ? currentScript.getAttribute("data-website-id") : null;
+
+  // Support Histats-compatible async queue: _Hasync.push(['Histats.start', '1,4867995,...'])
+  if (!websiteId && typeof window !== "undefined") {
+    const hasync = (window as any)._Hasync || (window as any)._Aasync;
+    if (Array.isArray(hasync)) {
+      for (const item of hasync) {
+        if (
+          Array.isArray(item) &&
+          (item[0] === "Histats.start" || item[0] === "Analycos.start") &&
+          typeof item[1] === "string"
+        ) {
+          const parts = item[1].split(",");
+          if (parts[1]) {
+            websiteId = parts[1].trim();
+            break;
+          }
+        }
+      }
+    }
+  }
+
   if (!websiteId) return;
 
   const customHost = currentScript.getAttribute("data-host-url");
