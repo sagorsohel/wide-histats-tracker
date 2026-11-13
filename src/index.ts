@@ -59,9 +59,14 @@ declare global {
   } else if ((currentScript as HTMLScriptElement).src) {
     const a = document.createElement("a");
     a.href = (currentScript as HTMLScriptElement).src;
-    apiHost = `${a.protocol}//${a.host}`;
+    // Route tracking directly to api.analycos.com (avoiding Next.js frontend proxy overhead)
+    if (a.host === "analycos.com") {
+      apiHost = `${a.protocol}//api.analycos.com`;
+    } else {
+      apiHost = `${a.protocol}//${a.host}`;
+    }
   } else {
-    apiHost = window.location.origin;
+    apiHost = "https://api.analycos.com";
   }
 
   const tracker = new Tracker(websiteId, apiHost);
